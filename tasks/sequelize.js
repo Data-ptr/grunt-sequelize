@@ -43,9 +43,7 @@ module.exports = function (grunt) {
 
     arg = arg || 'up';
 
-    task.init()
-
-      .then(function () {
+    (function () {
         switch (arg) {
           case 'up':
             grunt.log.writeln('Running pending migrations...');
@@ -62,13 +60,13 @@ module.exports = function (grunt) {
             grunt.log.error(err);
             throw err;
         }
-      })
+    })()
 
       .then(function () {
         grunt.log.writeln('Done!');
       })
 
-      .complete(done);
+      .then(done);
   });
 
   // TODO: maybe we should leave this kind of functionality to scaffold generators (ex. yeoman)?
