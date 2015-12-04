@@ -43,30 +43,31 @@ module.exports = function (grunt) {
 
     arg = arg || 'up';
 
-    (function () {
-        switch (arg) {
-          case 'up':
-            grunt.log.writeln('Running pending migrations...');
-            return task.up();
-          case 'down': /* falls through */
-          case 'undo':
-            grunt.log.writeln('Undoing last migration...');
-            return task.down();
-          case 'redo':
-            grunt.log.writeln('Redoing last migration...');
-            return task.redo();
-          default:
-            var err = new Error('Unknown task: sequelize:migrate:' + arg);
-            grunt.log.error(err);
-            throw err;
+    //Promise.method(
+    (   function () {
+            switch (arg) {
+              case 'up':
+                grunt.log.writeln('Running pending migrations...');
+                return task.up();
+              case 'down': /* falls through */
+              case 'undo':
+                grunt.log.writeln('Undoing last migration...');
+                return task.down();
+              case 'redo':
+                grunt.log.writeln('Redoing last migration...');
+                return task.redo();
+              default:
+                var err = new Error('No such task: sequelize:migrate:' + arg);
+                grunt.log.error(err);
+                throw err;
+            }
         }
-    })()
-
-      .then(function () {
+    )()
+    .then(function () {
         grunt.log.writeln('Done!');
-      })
 
-      .then(done);
+        return done();
+    });
   });
 
   // TODO: maybe we should leave this kind of functionality to scaffold generators (ex. yeoman)?
